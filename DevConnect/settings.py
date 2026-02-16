@@ -39,6 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'rest_framework',
+    'users',
+    'repositories',
+    'discussions',
+    'ai',
 ]
 
 MIDDLEWARE = [
@@ -122,3 +127,10 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'devconnect.settings')
+
+
+INSTALLED_APPS += ['django_filters']
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}

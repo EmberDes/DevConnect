@@ -20,6 +20,7 @@ class Post(models.Model):
         return self.content[:30]
 
 
+
 class Comment(models.Model):
     post = models.ForeignKey(
         Post,
@@ -32,3 +33,18 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content[:30]
+    
+
+
+
+    ##################
+
+    
+class Repository(models.Model):
+    name = models.CharField(max_length=255)
+    github_url = models.URLField()
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name

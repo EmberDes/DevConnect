@@ -4,6 +4,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import Post, Comment
 from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 def register_view(request):
     if request.method == "POST":
@@ -82,3 +84,10 @@ def toggle_like(request, post_id):
         "liked": liked,
         "total_likes": post.total_likes()
     })
+
+class HealthCheckView(APIView):    
+    def get(self,request):
+
+        return Response({
+            "status":"Devconnect Backend Running"
+        })

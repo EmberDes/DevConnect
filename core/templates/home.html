@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<button class="btn btn-sm btn-outline-danger like-btn"
+        data-id="{{ post.id }}">
+    ❤️ <span class="like-count">
+        {{ post.total_likes }}
+    </span>
+</button>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+
+        <!-- Create Post -->
+        <div class="card p-3 mb-4 shadow-sm post-card">
+            <h5>Create Post</h5>
+            <form method="POST">
+                {% csrf_token %}
+                <textarea name="content" class="form-control mb-2" 
+                          placeholder="Share something with the community..." rows="3"></textarea>
+                <button name="post_submit" class="btn btn-primary">Post</button>
+            </form>
+        </div>
+
+        <!-- Feed -->
+        {% for post in posts %}
+        <div class="card mb-4 shadow-sm post-card">
+            <div class="card-body">
+
+                <div class="d-flex align-items-center mb-2">
+                    <div class="avatar me-2">
+                        {{ post.author.username|first|upper }}
+                    </div>
+                    <div>
+                        <strong>{{ post.author.username }}</strong><br>
+                        <small class="text-muted">
+                            {{ post.created|timesince }} ago
+                        </small>
+                    </div>
+                </div>
+
+                <p class="mt-2">{{ post.content }}</p>
+
+                <hr>
+
+                <!-- Comments -->
+                <h6>Comments</h6>
+                {% for comment in post.comments.all %}
+                    <div class="mb-2 ps-3">
+                        <strong>{{ comment.author.username }}</strong>
+                        <small class="text-muted">
+                            • {{ comment.created|timesince }} ago
+                        </small>
+                        <div>{{ comment.content }}</div>
+                    </div>
+                {% empty %}
+                    <p class="text-muted">No comments yet</p>
+                {% endfor %}
+
+                <!-- Add Comment -->
+                <form method="POST" class="mt-2">
+                    {% csrf_token %}
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                    <input type="text" name="comment_content"
+                           class="form-control mb-2"
+                           placeholder="Write a comment...">
+                    <button name="comment_submit" class="btn btn-sm btn-outline-primary">
+                        Comment
+                    </button>
+                </form>
+
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+<script>
+document.querySelectorAll(".like-btn").forEach(button => {
+    button.addEventListener("click", function() {
+        const postId = this.dataset.id;
+
+        fetch(`/like/${postId}/`)
+            .then(response => response.json())
+            .then(data => {
+                this.querySelector(".like-count").innerText = data.total_likes;
+            });
+    });
+});
+</script>
+{% endblock %}

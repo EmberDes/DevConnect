@@ -64,6 +64,7 @@ def home(request):
     posts = Post.objects.select_related("author") \
     .prefetch_related("comments", "likes") \
     .order_by("-created")
+    
     return render(request, "home.html", {"posts": posts})
 
 @login_required

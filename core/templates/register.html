@@ -1,46 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>DevConnect Pro</title>
+{% extends 'base.html' %}
+{% block content %}
 
-    <!-- Tailwind CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+<div class="bg-white p-8 rounded-2xl shadow-md max-w-md mx-auto">
+    <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
 
-    <!-- Flowbite -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
-</head>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
 
-<body class="bg-gray-100 min-h-screen">
+        <button class="w-full mt-4 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">
+            Login
+        </button>
+    </form>
 
-<nav class="bg-white shadow-sm border-b">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
-        <a href="/" class="text-2xl font-bold text-indigo-600">
-            🚀 DevConnect Pro
+    <p class="mt-4 text-center text-sm text-gray-600">
+        Don’t have an account?
+        <a href="{% url 'register' %}" class="text-indigo-600 hover:underline">
+            Register
         </a>
-
-        <div class="flex items-center space-x-4">
-            {% if user.is_authenticated %}
-                <span class="text-gray-600">Hi, {{ user.username }}</span>
-                <a href="{% url 'logout' %}"
-                   class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
-                    Logout
-                </a>
-            {% else %}
-                <a href="{% url 'login' %}"
-                   class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
-                    Login
-                </a>
-            {% endif %}
-        </div>
-    </div>
-</nav>
-
-<div class="max-w-3xl mx-auto mt-10 px-4">
-    {% block content %}
-    {% endblock %}
+    </p>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
-
-</body>
-</html>
+{% endblock %}

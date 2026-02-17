@@ -58,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'DevConnect.urls'
@@ -133,7 +134,7 @@ LOGOUT_REDIRECT_URL = '/login/'
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'devconnect.settings')
 
 
-INSTALLED_APPS += ['django_filters']
+INSTALLED_APPS += ['django_filters','corsheaders']
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
@@ -150,3 +151,6 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
 }
+
+
+CORS_ALLOW_ALL_ORIGINS = True

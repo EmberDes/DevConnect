@@ -3,11 +3,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import AllowAny
+
 from repositories.models import Repository
 from .github_services import fetch_github_repositories
 from rest_framework import status 
 from django.contrib.auth.models import User
 
+from .models import UserLLMKey
+from core.encryption import encrypt_value
 # Create your views here.
 
 
@@ -80,3 +83,29 @@ class RegisterView(APIView):
             {"message": "User created successfully"},
             status=status.HTTP_201_CREATED
         )
+class SaveAPIKeysView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        provider = request.data.get("provider")
+        api_key = request.data.get("api_key")
+        github_token = request.data.get("github_token")
+
+        if provider and api_key:
+            encrypted_key = encrypt_value(api_key)
+
+            UserLLMKey.objects.update_or_create(
+                user=request.user,
+                provider=provider,
+                defaults={"encrypted_api_key": encrypted_key}
+            )
+
+        if github_token:
+            encrypted_token = encrypt_value(github_token)
+
+            UserGitHubToken.objects.update_or_create(
+                user=request.user,
+                defaults={"encrypted_token": encrypted_token}
+            )
+
+        return Response({"message": "Keys saved securely"})

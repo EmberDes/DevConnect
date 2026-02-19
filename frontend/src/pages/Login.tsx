@@ -29,7 +29,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-900 via-gray-900 to-black">
+    <div className="min-h-screen flex items-center justify-center bg- gradient-to-br from-indigo-900 via-gray-900 to-black">
       
       {/* Card */}
       <div className="w-full max-w-md p-8 bg-white/5 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10">

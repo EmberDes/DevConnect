@@ -9,8 +9,8 @@ export default function Landing() {
 
       {/* Background Glow */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute w-[700px] h-[700px] bg-indigo-600/20 blur-[150px] rounded-full top-[-200px] left-[-200px]" />
-        <div className="absolute w-[600px] h-[600px] bg-purple-600/20 blur-[150px] rounded-full bottom-[-200px] right-[-200px]" />
+        <div className="absolute w- [700px] h- [700px] bg-indigo-600/20 blur-[150px] rounded-full top-    [-200px]  left- [-200px]" />
+        <div className="absolute w- [600px] h- [600px] bg-purple-600/20 blur-[150px] rounded-full bottom- [-200px] right- [-200px]" />
       </div>
 
       {/* Navbar */}
@@ -41,7 +41,7 @@ export default function Landing() {
           className="text-6xl font-extrabold max-w-4xl mx-auto"
         >
           The Smartest Way to
-          <span className="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
+          <span className=" bg- gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
             {" "}Understand Your Code
           </span>
         </motion.h2>

@@ -1,9 +1,8 @@
 from django.urls import path
 
-from .views import RepositoryAnalyzeView
-
+from .views import AnalyzeRepoView
 
 
 urlpatterns = [
-    path('ai/analyze/<int:pk>/', RepositoryAnalyzeView.as_view()),
+    path('analyze/', AnalyzeRepoView.as_view()),
 ]

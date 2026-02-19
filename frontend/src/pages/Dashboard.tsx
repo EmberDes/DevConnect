@@ -2,6 +2,12 @@ import { useState, useContext } from "react";
 import API from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+
+import remarkGfm from "remark-gfm";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -38,26 +44,31 @@ export default function Dashboard() {
   };
 
   const handleAnalyze = async () => {
-    if (!repoUrl) {
-      alert("Please enter a repository URL");
+  try {
+    setLoadingAI(true);
+
+    const res = await API.post("ai/analyze/", {
+      repo_url: repoUrl,
+      provider: provider,
+    });
+
+    console.log("Analyze Response:", res.data);
+    console.log("")
+    const sessionId = res.data.session_id;
+
+    if (!sessionId) {
+      console.error("No session ID returned!");
       return;
     }
 
-    try {
-      setLoadingAI(true);
+    navigate(`/chat/${sessionId}`);
 
-      const res = await API.post("ai/analyze/", {
-        repo_url: repoUrl,
-        provider: provider,
-      });
-
-      setAnalysis(res.data.analysis);
-    } catch (err: any) {
-      alert(err?.response?.data?.error || "Analysis failed");
-    } finally {
-      setLoadingAI(false);
-    }
-  };
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoadingAI(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 text-white">
@@ -155,38 +166,23 @@ export default function Dashboard() {
           </div>
 
           <button
-            onClick={handleAnalyze}
-            disabled={loadingAI}
-            className="px-8 py-3 bg-purple-600 hover:bg-purple-500 rounded-lg transition shadow-lg shadow-purple-600/30 disabled:opacity-50"
-          >
-            {loadingAI ? "Analyzing..." : "Analyze with AI"}
-          </button>
+              onClick={handleAnalyze}
+              disabled={loadingAI}
+              className="px-8 py-3 bg-purple-600 hover:bg-purple-500 rounded-lg transition shadow-lg shadow-purple-600/30 disabled:opacity-50"
+            >
+              {loadingAI ? "Analyzing..." : "Analyze with AI"}
+            </button>
+            {loadingAI && (
+              <div className="mt-6 animate-pulse space-y-4">
+                <div className="h-4 bg-gray-800 rounded w-3/4"></div>
+                <div className="h-4 bg-gray-800 rounded w-1/2"></div>
+                <div className="h-4 bg-gray-800 rounded w-2/3"></div>
+              </div>
+            )}
         </div>
       </div>
 
-      {/* ANALYSIS MODAL */}
-      {analysis && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-6 z-50">
-          <div className="bg-gray-900 max-w-3xl w-full p-8 rounded-2xl border border-gray-800 shadow-2xl max-h-[85vh] overflow-y-auto">
-
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-semibold text-indigo-400">
-                AI Analysis Result
-              </h3>
-              <button
-                onClick={() => setAnalysis("")}
-                className="text-gray-400 hover:text-white"
-              >
-                ✕
-              </button>
-            </div>
-
-            <pre className="text-gray-300 whitespace-pre-wrap text-sm leading-relaxed">
-              {analysis}
-            </pre>
-          </div>
-        </div>
-      )}
+    
 
     </div>
   );

@@ -5,6 +5,9 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import Landing from "./pages/Landing";
+import Chat from "./pages/chat";
+
+
 
 function App() {
   return (
@@ -14,6 +17,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Landing/>}/>
+          <Route path = "/chat/:sessionId" element={<Chat />} />
           <Route
             path="/dashboard"
             element={

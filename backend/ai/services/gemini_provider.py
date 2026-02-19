@@ -20,8 +20,8 @@ class GeminiProvider(BaseLLMProvider):
         - Security concerns
         - Scalability advice
 
-        in finite and well quoted points such that u give disnict and valuable knowledge.
-        
+        in finite and well quoted stuctured 5 points such that u give disnict and valuable knowledge.
+
         """
 
         response = self.client.models.generate_content(
@@ -29,4 +29,20 @@ class GeminiProvider(BaseLLMProvider):
             contents=prompt,
         )
 
+        return response.text
+
+    def chat(self, messages):
+        formatted_messages = []
+
+        for msg in messages:
+            formatted_messages.append({
+                "role": msg["role"],
+                "parts": [{"text": msg["content"]}]
+            })
+
+
+        response = self.client.models.generate_content(
+            model="gemini-1.5-flash",
+            contents=messages
+        )
         return response.text

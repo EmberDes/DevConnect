@@ -19,3 +19,10 @@ class OpenAIProvider(BaseLLMProvider):
         )
 
         return response.choices[0].message.content
+    
+    def chat(self, messages):
+        response = self.client.models.generate_content(
+            model="gemini-1.5-flash",
+            contents=messages
+        )
+        return response.text
